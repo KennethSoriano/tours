@@ -6,47 +6,38 @@ import Tours from './Tours'
 const url = 'https://course-api.com/react-tours-project'
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [tours, setTours] = useState([]);
+  const [tours, setTours] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  const removeTour = (id) => {
-    const newTours = tours.filter((tour) => {tour.id !== id});
-    setTours(newTours)
-  }
-
-  const fetchTours = async () => {
-    setLoading(true);
+  const fetchData = async () => {
+    setLoading(true)
     try {
-      const response = await fetch(url);
-      const tours = await response.json();
-      setLoading(false);
-      setTours(tours)
+      const response = await fetch(url)
+      setTours = response.json
+      setLoading(false)
     } catch (error) {
       setLoading(false)
+      return (
+        error
+      )
     }
-  };
+  }
 
   useEffect(() => {
-    fetchTours();
+    fetchData();
   }, [])
 
-  if (loading) {
-    return <main>
-      <Loading />
-    </main>
+  if(loading) {
+    return <Loading />
   }
 
-  if(tours.length === 0) {
-    return <main>
-      <div className="title">
-        <h2>no tours left</h2>
-        <button onClick={fetchTours}> refresh</button>
-      </div>
-    </main>
+  const clickHandler = (id) => {
+    const newTours = tours.map((tours) => tours.id !== id)
   }
+
   return (
     <main>
-      <Tours tours={tours} removeTour={removeTour}/>
+      <Tours tours={tours} clickHandler={clickHandler}/>
     </main>
   );
 };
